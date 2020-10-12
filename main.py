@@ -9,38 +9,33 @@ class CoordConvert:
 
         lat, lon = {}, {}
         if input_format.lower() == 'mgrs':
+            print('\nMGRS Input...', input_data)
             latd, lond = self.mgrs.toLatLon(input_data)
             lat['d'],lat['m'],lat['s'] = self.mgrs.ddtodms(latd)
             lon['d'],lon['m'],lon['s'] = self.mgrs.ddtodms(lond)
             dms_string = ('N ' if lat['d'] > 0 else 'S ') + '{:.0f} {:.0f} {:.4f}, '.format(lat['d'],lat['m'],lat['s']) + ('E ' if lon['d'] > 0 else 'W ') + '{:.0f} {:.0f} {:.4f}'.format(abs(lon['d']),lon['m'],lon['s'])
-            print('\nMGRS to Decimal: {:.4f} {:.4f}'.format(latd,lond))
+            print('MGRS to Decimal: {:.6f} {:.6f}'.format(latd,lond))
             print('MGRS to DMS: {}'.format(dms_string))
         if input_format.lower() == 'dd':
+            print('\nDecimal Input...', input_data)
             to_mgrs = self.mgrs.toMGRS(input_data[0],input_data[1])
             lat['d'],lat['m'],lat['s'] = self.mgrs.ddtodms(input_data[0])
             lon['d'],lon['m'],lon['s'] = self.mgrs.ddtodms(input_data[1])
             dms_string = 'N {:.0f} {:.0f} {:.4f}, E 0{:.0f} {:.0f} {:.4f}'.format(lat['d'],lat['m'],lat['s'],abs(lon['d']),lon['m'],lon['s'])
-            print('\nDecimal to MGRS: {}'.format(to_mgrs))
+            print('Decimal to MGRS: {}'.format(to_mgrs))
             print('Decimal to DMS: {}'.format(dms_string))
         if input_format.lower() == 'dms':
-            print('\nDMS to Decimal: {}')
-            print('DMS to MGRS: {}')
-
-
-# def main():
-#     m = mgrs.MGRS()
-#     # dcs = '38TLN046623'
-#     dcs = input("Enter MGRS cord.")
-#     dd = m.toLatLon(dcs)
-#     lat = m.ddtodms(dd[0])
-#     Lat = round(lat[1] + lat[2] / 60, 1)
-#     long = m.ddtodms(dd[1])
-#     Long = round(long[1] + long[2] / 60, 1)
-#     print(f"N{int(lat[0])} {Lat}")
-#     print(f"E0{int(long[0])} {Long}")
+            print('\nDMS Input...', input_data)
+            lat_float, lon_float = tuple(float(i) for i in input_data[0]), tuple(float(j) for j in input_data[1])
+            lat_string = '{:.0f}{:.0f}{:.2f}'.format(lat_float[0],lat_float[1],lat_float[2]) + ( 'N' if lat_float[0] > 0 else 'S' )
+            lon_string = '{:.0f}{:.0f}{:.2f}'.format(lon_float[0],lon_float[1],lon_float[2]) + ( 'E' if lon_float[0] > 0 else 'W' )
+            lat_to_dd = self.mgrs.dmstodd(lat_string)
+            lon_to_dd = self.mgrs.dmstodd(lon_string)
+            to_mgrs = self.mgrs.toMGRS(lat_to_dd, lon_to_dd)
+            print('DMS to Decimal: {:.6f} {:.6f}'.format(lat_to_dd,lon_to_dd))
+            print('DMS to MGRS: {}'.format(to_mgrs))
 
 if __name__ == '__main__':
-    # main()
-    CoordConvert('mgrs', '15TWG0000049776')
-    CoordConvert('dd', (42.0, -93.0))
-    # CoordConvert('dms', '')
+    CoordConvert('mgrs', '44SMD4521498457')
+    CoordConvert('dd', (35.227672, -80.397949))
+    CoordConvert('dms', [(35,13,39.6192),(80,23,52.6164)])
