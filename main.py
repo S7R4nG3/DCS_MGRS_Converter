@@ -44,3 +44,4 @@ if __name__ == '__main__':
     print(dd.conversion)
     dms  = CoordConvert('dms', [(35,13,39.6192),(-80,23,52.6516)])
     print(dms.conversion)
+    
