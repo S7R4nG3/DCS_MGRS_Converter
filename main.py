@@ -1,7 +1,7 @@
 # By Icarus747
 # Contributors: S7R4nG3
 # Created 10/11/2020
-from mgrs import *
+from mgrs import MGRS as MGRS
 
 class CoordConvert:
     def __init__(self, input_format, input_data):
